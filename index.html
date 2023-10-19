@@ -16,7 +16,7 @@
         }
 
         #website-dropdown {
-            width: 150px;
+            width: 30px;
         }
     </style>
 </head>
@@ -115,7 +115,7 @@
             // Create a link to download the HTML file with timestamp as the name
             const a = document.createElement('a');
             a.href = url;
-            a.download = `unchecked-jokes-${timestamp}.html`;
+            a.download = `jokes-${timestamp}.html`;
             a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
