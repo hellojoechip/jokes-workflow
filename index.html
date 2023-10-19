@@ -121,15 +121,34 @@
             URL.revokeObjectURL(url);
         }
 
-        function isJokeChecked(joke) {
-            const savedJokesList = document.getElementById("saved-jokes-list");
-            const checkboxes = savedJokesList.querySelectorAll('input[type="checkbox"]');
-            for (const checkbox of checkboxes) {
-                if (checkbox.nextElementSibling.textContent === joke && checkbox.checked) {
-                    return true;
-                }
+        function saveUncheckedJokes() {
+            const uncheckedJokes = savedJokes.filter(joke => !isJokeChecked(joke));
+            if (uncheckedJokes.length === 0) {
+                alert("No unchecked jokes to save.");
+                return;
             }
-            return false;
+
+            // Generate a timestamp for the file name
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '');
+
+            // Create an HTML list for the unchecked jokes
+            const uncheckedJokesListHTML = `<ul>${uncheckedJokes.map(joke => `<li>${joke}</li>`).join('')}</ul>`;
+
+            // Create a Blob with the HTML content
+            const blob = new Blob([uncheckedJokesListHTML], { type: 'text/html' });
+
+            // Create a URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Create a link to download the HTML file with timestamp as the name
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `unchecked-jokes-${timestamp}.html`;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         function goToSelectedWebsite() {
