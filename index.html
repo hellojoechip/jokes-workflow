@@ -6,9 +6,12 @@
 <body>
     <h1>Joke Generator</h1>
     
-    <div id="jokes-container"></div>
-    
     <button onclick="generateJoke()">Get Joke</button>
+    
+    <div id="jokes-container">
+        <h2>Saved Jokes:</h2>
+        <ul id="saved-jokes-list"></ul>
+    </div>
     
     <script>
         async function fetchJoke() {
@@ -22,18 +25,18 @@
         }
         
         function displayJoke(jokeText) {
-            const jokesContainer = document.getElementById("jokes-container");
-            const jokeElement = document.createElement("p");
-            jokeElement.textContent = jokeText;
-
+            const savedJokesList = document.getElementById("saved-jokes-list");
+            const jokeItem = document.createElement("li");
+            jokeItem.textContent = jokeText;
+            
             const saveButton = document.createElement("button");
             saveButton.textContent = "Save Joke";
             saveButton.addEventListener("click", function () {
                 saveJoke(jokeText);
             });
 
-            jokeElement.appendChild(saveButton);
-            jokesContainer.appendChild(jokeElement);
+            jokeItem.appendChild(saveButton);
+            savedJokesList.appendChild(jokeItem);
         }
 
         async function generateJoke() {
@@ -46,16 +49,7 @@
         }
 
         function saveJoke(jokeText) {
-            const blob = new Blob([jokeText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'joke.txt';
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            // You can add additional logic for saving jokes here if needed.
         }
     </script>
 </body>
