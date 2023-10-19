@@ -45,6 +45,7 @@
             jokeItem.appendChild(checkbox);
             jokeItem.appendChild(label);
             savedJokesList.appendChild(jokeItem);
+            savedJokes.push(jokeText);
         }
 
         function toggleJokeSelection(jokeItem, checkbox, jokeText) {
@@ -71,15 +72,24 @@
                 return;
             }
 
+            // Create an HTML list for the unchecked jokes
             const uncheckedJokesListHTML = `<ul>${uncheckedJokes.map(joke => `<li>${joke}</li>`).join('')}</ul>`;
 
+            // Create a Blob with the HTML content
+            const blob = new Blob([uncheckedJokesListHTML], { type: 'text/html' });
+
+            // Create a URL for the Blob
+            const url = URL.createObjectURL(blob);
+
+            // Create a link to download the HTML file
             const a = document.createElement('a');
-            a.href = 'data:text/html,' + encodeURIComponent(uncheckedJokesListHTML);
+            a.href = url;
             a.download = 'unchecked-jokes.html';
             a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         function isJokeChecked(joke) {
