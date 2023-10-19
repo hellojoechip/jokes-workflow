@@ -7,7 +7,7 @@
     <h1>Joke Generator</h1>
     
     <button onclick="generateJoke()">Get Joke</button>
-    <button onclick="saveAllJokes()">Save All Jokes</button>
+    <button onclick="saveUncheckedJokes()">Save Unchecked Jokes</button>
     
     <div id="jokes-container">
         <h2>Saved Jokes:</h2>
@@ -35,7 +35,7 @@
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
             checkbox.addEventListener("change", function () {
-                toggleJokeSelection(jokeItem, checkbox);
+                toggleJokeSelection(jokeItem, checkbox, jokeText);
             });
 
             // Create a label for the checkbox
@@ -45,10 +45,9 @@
             jokeItem.appendChild(checkbox);
             jokeItem.appendChild(label);
             savedJokesList.appendChild(jokeItem);
-            savedJokes.push(jokeText);
         }
 
-        function toggleJokeSelection(jokeItem, checkbox) {
+        function toggleJokeSelection(jokeItem, checkbox, jokeText) {
             if (checkbox.checked) {
                 jokeItem.style.textDecoration = "line-through"; // Example: Strikethrough the joke when selected
             } else {
@@ -65,21 +64,33 @@
             }
         }
 
-        function saveAllJokes() {
-            if (savedJokes.length === 0) {
-                alert("No jokes to save.");
+        function saveUncheckedJokes() {
+            const uncheckedJokes = savedJokes.filter(joke => !isJokeChecked(joke));
+            if (uncheckedJokes.length === 0) {
+                alert("No unchecked jokes to save.");
                 return;
             }
 
-            const savedJokesListHTML = `<ul>${savedJokes.map(joke => `<li>${joke}</li>`).join('')}</ul>`;
+            const uncheckedJokesListHTML = `<ul>${uncheckedJokes.map(joke => `<li>${joke}</li>`).join('')}</ul>`;
 
             const a = document.createElement('a');
-            a.href = 'data:text/html,' + encodeURIComponent(savedJokesListHTML);
-            a.download = 'saved-jokes.html';
+            a.href = 'data:text/html,' + encodeURIComponent(uncheckedJokesListHTML);
+            a.download = 'unchecked-jokes.html';
             a.style.display = 'none';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+        }
+
+        function isJokeChecked(joke) {
+            const savedJokesList = document.getElementById("saved-jokes-list");
+            const checkboxes = savedJokesList.querySelectorAll('input[type="checkbox"]');
+            for (const checkbox of checkboxes) {
+                if (checkbox.nextElementSibling.textContent === joke && checkbox.checked) {
+                    return true;
+                }
+            }
+            return false;
         }
     </script>
 </body>
