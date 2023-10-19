@@ -2,9 +2,38 @@
 <html>
 <head>
     <title>Joke Generator</title>
+    <style>
+        /* Style for the dropdown and its container */
+        #website-links-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+
+        #website-dropdown {
+            width: 150px;
+        }
+    </style>
 </head>
 <body>
     <h1>Joke Generator</h1>
+    
+    <!-- Dropdown for Website Links -->
+    <div id="website-links-container">
+        <h2>Website Links:</h2>
+        <select id="website-dropdown">
+            <option value="https://example.com">Example Website</option>
+            <option value="https://another-site.com">Another Website</option>
+            <option value="https://yet-another-site.com">Yet Another Website</option>
+            <!-- Add more options as needed -->
+        </select>
+        <button onclick="goToSelectedWebsite()">Go to Website</button>
+    </div>
     
     <button onclick="generateJoke()">Get Joke</button>
     <button onclick="saveUncheckedJokes()">Save Unchecked Jokes</button>
@@ -101,6 +130,13 @@
                 }
             }
             return false;
+        }
+
+        function goToSelectedWebsite() {
+            const websiteDropdown = document.getElementById("website-dropdown");
+            const selectedOption = websiteDropdown.options[websiteDropdown.selectedIndex];
+            const websiteUrl = selectedOption.value;
+            window.open(websiteUrl, '_blank');
         }
     </script>
 </body>
