@@ -16,14 +16,13 @@
         }
 
         #website-dropdown {
-            width: 500px;
+            width: 150px;
         }
     </style>
 </head>
 <body>
     <h1>Joke Generator</h1>
-    
-    <!-- Dropdown for Website Links -->
+<!-- Dropdown for Website Links -->
     <div id="website-links-container">
         <h2>Saved Joke Set:</h2>
         <select id="website-dropdown">
@@ -101,33 +100,6 @@
                 return;
             }
 
-            // Create an HTML list for the unchecked jokes
-            const uncheckedJokesListHTML = `<ul>${uncheckedJokes.map(joke => `<li>${joke}</li>`).join('')}</ul>`;
-
-            // Create a Blob with the HTML content
-            const blob = new Blob([uncheckedJokesListHTML], { type: 'text/html' });
-
-            // Create a URL for the Blob
-            const url = URL.createObjectURL(blob);
-
-            // Create a link to download the HTML file
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'unchecked-jokes.html';
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        function saveUncheckedJokes() {
-            const uncheckedJokes = savedJokes.filter(joke => !isJokeChecked(joke));
-            if (uncheckedJokes.length === 0) {
-                alert("No unchecked jokes to save.");
-                return;
-            }
-
             // Generate a timestamp for the file name
             const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '');
 
@@ -149,6 +121,17 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+
+        function isJokeChecked(joke) {
+            const savedJokesList = document.getElementById("saved-jokes-list");
+            const checkboxes = savedJokesList.querySelectorAll('input[type="checkbox"]');
+            for (const checkbox of checkboxes) {
+                if (checkbox.nextElementSibling.textContent === joke && checkbox.checked) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         function goToSelectedWebsite() {
